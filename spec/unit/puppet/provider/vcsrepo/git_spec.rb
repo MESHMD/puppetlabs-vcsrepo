@@ -250,6 +250,7 @@ describe Puppet::Type.type(:vcsrepo).provider(:git_provider) do
         provider.expects(:git).with('checkout', '--force', resource.value(:revision))
         provider.expects(:git).with('branch', '-a').returns(resource.value(:revision))
         provider.expects(:git).with('reset', '--hard', "origin/#{resource.value(:revision)}")
+        provider.expects(:git).with('clean', '--force')
         provider.revision = resource.value(:revision)
       end
     end
@@ -261,6 +262,7 @@ describe Puppet::Type.type(:vcsrepo).provider(:git_provider) do
         provider.expects(:git).with('checkout', '--force', resource.value(:revision))
         provider.expects(:git).with('branch', '-a').returns(resource.value(:revision))
         provider.expects(:git).with('reset', '--hard', "origin/#{resource.value(:revision)}")
+        provider.expects(:git).with('clean', '--force')
         provider.revision = resource.value(:revision)
       end
     end
@@ -269,6 +271,8 @@ describe Puppet::Type.type(:vcsrepo).provider(:git_provider) do
         resource[:revision] = 'a-commit-or-tag'
         provider.expects(:git).with('branch', '-a').returns(fixture(:git_branch_a))
         provider.expects(:git).with('checkout', '--force', resource.value(:revision))
+        provider.expects(:git).with('reset', '--hard', 'a-commit-or-tag')
+        provider.expects(:git).with('clean', '--force')
         provider.expects(:git).with('branch', '-a').returns(fixture(:git_branch_a))
         provider.expects(:git).with('branch', '-a').returns(fixture(:git_branch_a))
         provider.expects(:git).with('submodule', 'update', '--init', '--recursive')
